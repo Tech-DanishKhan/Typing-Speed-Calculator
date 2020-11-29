@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typing Calculator</title>
+	<link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap" rel="stylesheet">
+
+
+	<style>
+	*{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Turret Road', cursive;
+ }
+	.main_div{
+      
+      position: relative;
+      width: 100%;
+      height: 100vh;
+
+      background: -webkit-linear-gradient(to right, #61045F, #AA076B);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #61045F, #AA076B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	}
+
+	textarea{
+		background-color: white;
+		border: 1rem solid #ff426b;
+		border-radius: 10px 10px 0 0;
+		font-size: 0.9rem;
+		color: black;
+	}
+
+	.div1{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%)
+
+	}
+	.div1{
+		text-align: center;
+	}
+
+  .btn_modification {
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.btn_modification :hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+	</style>
+
+</head>
+<body>
+	<div class="main_div">
+		<div class="div1">
+		<h1> Welcome Check Your Typing Speed </h1>
+		<br>
+		<h2 id="heading2"> </h2>
+		<br>
+		<textarea id="typingArea" cols="110" rows="20" placeholder=" Click on the Start Button and Start Typing"></textarea>
+		<br>
+		<button id="btn" class="btn_modification"> Start </button>
+        </div>
+	</div>
+
+	<script>
+	     const SetofWords= [ 
+"	The bikers rode down the long and narrow path to reach the city park. When they reached a good spot to rest, they began to look for signs of spring. The sun was bright, and a lot of bright red and blue blooms proved to all that warm spring days were the very best. Spring rides were planned. They had a burger at the lake and then rode farther up the mountain.",
+
+"   A paralegal is a person trained in legal matters who performs tasks requiring knowledge of the law and legal procedures. A paralegal is not a lawyer but can be employed by a law office or work freelance at a company or law office. ",
+
+"   Closed captions were created for deaf or hard of hearing individuals to assist in comprehension. They can also be used as a tool by those learning to read, learning to speak a non-native language, or in an environment where the audio is difficult to hear or is intentionally muted." ,
+
+"   Many touch typists also use keyboard shortcuts or hotkeys when typing on a computer. This allows them to edit their document without having to take their hands off the keyboard to use a mouse. An example of a keyboard shortcut is pressing the Ctrl key plus the S key to save a document as they type, or the Ctrl key plus the Z key to undo a mistake.",
+
+"   A virtual assistant (typically abbreviated to VA) is generally self-employed and provides professional administrative, technical, or creative assistance to clients remotely from a home office.",
+
+"   Because of the laboriousness of the translation process, since the 1940s efforts have been made, with varying degrees of success, to automate translation or to mechanically aid the human translator. More recently, the rise of the Internet has fostered a world-wide market for translation services and has facilitated 'language localization'.",
+
+"   Web designers are expected to have an awareness of usability and if their role involves creating mark up then they are also expected to be up to date with web accessibility guidelines. The different areas of web design include web graphic design; interface design; authoring, including standardised code and proprietary software",
+
+"   A late 20th century trend in typing, primarily used with devices with small keyboards (such as PDAs and Smartphones), is thumbing or thumb typing. This can be accomplished using one or both thumbs. Similar to desktop keyboards and input devices, if a user overuses keys which need hard presses and/or have small and unergonomic layouts, it could cause thumb tendonitis.",
+
+"   Medical transcription, also known as MT, is an allied health profession dealing with the process of transcribing voice-recorded medical reports that are dictated by physicians, nurses and other healthcare practitioners. Medical reports can be voice files, notes taken during a lecture, or other spoken material.",
+
+"   Being human makes us susceptible to the onset of feelings. The role of these emotions varies. Some of them are useful while others may be harmful. The use of social media for self-expression has reached a point that it makes us feel we can say anything. This begins when we see people expressing anything and everything that come to mind."
+];
+
+let heading2_js = document.getElementById('heading2');
+let typingArea_js = document.getElementById('typingArea');
+let btn_js = document.getElementById('btn');
+let starttime , endtime;
+
+const playGame = () => {
+
+	let rendom_number = Math.floor(Math.random()*SetofWords.length);
+	heading2_js.innerText = SetofWords[rendom_number];
+	let date = new Date;
+	starttime = date.getTime();
+	btn_js.innerText = "Done";
+}
+
+const endGame = () => {
+	let date2 = new Date;
+	endtime = date2.getTime();
+	let totaltime = ((endtime - starttime)/1000);
+	let totalstring = typingArea_js.value;
+	let totalword = wordcounter(totalstring);
+
+	let typing_speed = Math.round((totalword/totaltime)*60);
+	
+	let comp = comparision(totalstring,heading2_js.innerText);
+	let final_massage = "Your Typed Total " + totalword + " words in " + totaltime + " so your typing speed is "+ typing_speed + " Words Per Minute and correct word is " + comp;
+	heading2_js.innerText = final_massage;
+
+
+}
+
+const comparision = (str1,str2) => {
+	let word1 = str1.split(" ");
+	let word2 = str2.split(" ");
+	let count = 0 ;
+
+	word1.forEach(function(item,index)
+	{
+		if(item == word2[index])
+		{
+			count++;
+		}
+	})
+
+	let correct_word = (count);
+	return (correct_word +" out of " + word2.length);
+}
+
+const wordcounter = (totalstring) =>{
+	let words = totalstring.split(" ");
+	return words.length;
+}
+
+btn_js.addEventListener('click',function(){
+	if(this.innerText == 'Start')
+	{
+		typingArea_js.disabled = false;
+		playGame();
+	}
+
+	else if(this.innerText == 'Done')
+	{
+		typingArea_js.disabled = true;
+		btn_js.innerText = 'Start';
+		endGame();
+		document.getElementById('typingArea').value = null;
+	}
+})
+	</script>
+</body>
+</html>
